@@ -1,8 +1,0 @@
-{
-    "bookName": "String",
-    "issued": "Number",
-    "available": "Number",
-    "total": "Number",
-    "cover": "String",
-    "rating": "Number"
-}
