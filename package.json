@@ -1,5 +1,5 @@
 {
-  "name": "bookshelfly",
+  "name": "Overbooked",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,20 +12,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/guptasajal411/bookshelfly.git"
+    "url": ""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/guptasajal411/bookshelfly/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/guptasajal411/bookshelfly#readme",
+  "homepage": "",
   "dependencies": {
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "md5": "^2.3.0",
     "mongoose": "^6.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }

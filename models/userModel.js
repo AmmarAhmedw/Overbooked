@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 require("dotenv").config();
 
-mongoose.connect("mongodb+srv://" + process.env.usernameMongoDB + ":" + process.env.password + "@cluster0.xgjts.mongodb.net/bookshelflyDB");
+mongoose.connect("mongodb+srv://wolfie:TA_%24tn%40k2NLSAWi@cluster0.fiadc.mongodb.net/Overbooked?retryWrites=true&w=majority")
+  .then(() => console.log('Database connected'))
+  .catch(err => console.log('Error connecting to database:', err));
+
 
 const userSchema = new mongoose.Schema({
     username: String,

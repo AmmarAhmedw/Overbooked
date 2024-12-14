@@ -2,7 +2,7 @@ const md5 = require('md5');
 const User = require("../models/userModel.js");
 
 // GET
-// landing page for bookshelfly
+// landing page for Overbooked
 exports.getWelcome = function (req, res) {
     res.render("welcome");
 }
