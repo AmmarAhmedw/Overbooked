@@ -13,7 +13,10 @@ app.use(express.static("public"));
 // Serve static files from the 'uploads' folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Include your routes
 app.use("/", require(path.join(__dirname, "./routes/routes.js")));
+app.get('/home', (req, res) => {
+    res.render('home'); 
+});
+
 
 module.exports = app;

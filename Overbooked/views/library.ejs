@@ -14,13 +14,23 @@
                             <h4 class="card-title">
                                 <%= book.bookName %>
                             </h4>
+                            <!-- Show the cover image -->
+                            <img src="<%= book.cover %>" alt="Book Cover" class="img-fluid mb-2">
+                            <!-- Show the PDF if available -->
                             <% if (book.pdf) { %>
                                 <div class="mt-2">
                                     <a href="<%= book.pdf %>" target="_blank" class="btn btn-outline-primary">View PDF</a>
                                 </div>
                             <% } %>
+                            <!-- Return book form -->
                             <form class="mx-auto pb-3" action="/library/<%= user._id %>/returnBook" method="POST">
                                 <button name="returnBookName" value="<%= book.bookName %>" type="submit" class="btn btn-outline-dark">Return this book</button>
+                            </form>
+                            <!-- Delete book form -->
+                            <form action="/library/<%= user._id %>/deleteBook/<%= book._id %>" method="POST" class="mt-2">
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -28,6 +38,8 @@
             <% }); %>
         </div>
     </div>
+
+    <!-- Library browsing section -->
     <div class="container mt-5">
         <div class="row">
             <div class="col-8">
@@ -42,6 +54,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Display library books -->
     <div class="container">
         <div class="row">
             <% books.forEach(function(book){ %>
@@ -49,7 +63,7 @@
                     <div class="card shadow border h-100">
                         <div class="row g-0">
                             <div class="col-4">
-                                <img src="<%= book.cover %>" class="card-img-top" alt="">
+                                <img src="<%= book.cover %>" class="card-img-top" alt="Book Cover">
                             </div>
                             <div class="col-8">
                                 <div class="card-body container">
@@ -66,11 +80,13 @@
                                         Issued copies: <%= book.issued %><br>
                                         Total copies: <%= book.total %><br>
                                     </p>
+                                    <!-- Show the PDF if available -->
                                     <% if (book.pdf) { %>
                                         <div class="mt-2">
                                             <a href="<%= book.pdf %>" target="_blank" class="btn btn-outline-primary">View PDF</a>
                                         </div>
                                     <% } %>
+                                    <!-- Issue book form if available -->
                                     <% if (book.available <= 0){ %>
                                         <button class="btn btn-outline-danger outOfStock">Out of Stock!</button>
                                     <% } else { %>
@@ -78,6 +94,13 @@
                                             <button name="bookName" value="<%= book.bookName %>" type="submit" class="btn btn-outline-success">Issue this book!</button>
                                         </form>
                                     <% } %>
+
+                                    <!-- Delete book form -->
+                                    <form action="/library/<%= user._id %>/deleteBook/<%= book._id %>" method="POST" class="mt-2">
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

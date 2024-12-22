@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema({
   issuedBooks: [
     {
       bookName: String,
+      cover: String,
+      pdf: Buffer
     },
   ],
   numberOfIssuedBooks: Number,

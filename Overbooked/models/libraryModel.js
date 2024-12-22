@@ -8,7 +8,7 @@ mongoose.connect(process.env.DB_URI, {
   .then(() => console.log('Database connected'))
   .catch(err => console.log('Error connecting to database:', err));
 
-// Define the schema
+
 const librarySchema = new mongoose.Schema({
   bookName: String,
   issued: Number,
@@ -16,16 +16,16 @@ const librarySchema = new mongoose.Schema({
   total: Number,
   cover: String,
   rating: Number,
-  pdf: Buffer, // Use Buffer to store PDF binary data
+  pdf: Buffer, 
 });
 
-// Create the model
+
 const Library = mongoose.model('Library', librarySchema);
 
-// Function to upload a book with a PDF
+
 const uploadBookWithPdf = async (bookDetails, pdfFile) => {
   try {
-    const pdfBuffer = require('fs').readFileSync(pdfFile); // Read the PDF file as a buffer
+    const pdfBuffer = require('fs').readFileSync(pdfFile); 
     const newBook = new Library({
       ...bookDetails,
       pdf: pdfBuffer,

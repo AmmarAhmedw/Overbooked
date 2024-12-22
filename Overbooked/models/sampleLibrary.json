@@ -4,5 +4,6 @@
     "available": "Number",
     "total": "Number",
     "cover": "String",
-    "rating": "Number"
+    "rating": "Number",
+    "pdf": "Buffer"
 }

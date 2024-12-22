@@ -39,4 +39,8 @@ app
     .get(libraryController.getNewBook)
     .post(libraryController.postNewBook);
 
+app
+    .route("/library/:userID/deleteBook/:bookID")
+    .post(libraryController.postDeleteBook);
+
 module.exports = app;

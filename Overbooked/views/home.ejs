@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overbooked - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex items-center justify-between text-white">
+            <h1 class="text-2xl font-bold">Overbooked</h1>
+            <ul class="flex space-x-6">
+                <li><a href="/" class="hover:text-gray-300">Home</a></li>
+                <li><a href="/books" class="hover:text-gray-300">Books</a></li>
+                <li><a href="/about" class="hover:text-gray-300">About</a></li>
+                <li><a href="/contact" class="hover:text-gray-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-blue-500 text-white text-center py-24">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-4xl font-bold mb-4">Welcome to Overbooked</h2>
+            <p class="text-xl mb-8">Your one-stop destination for all things books. Discover, borrow, and explore an endless collection of books.</p>
+            <a href="/books" class="bg-white text-blue-600 py-2 px-6 rounded-full font-semibold hover:bg-blue-100 transition">Browse Books</a>
+        </div>
+    </section>
+
+    <!-- Featured Books -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4">
+            <h3 class="text-3xl font-bold text-center mb-8">Featured Books</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Example Book Card -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition">
+                    <img src="https://via.placeholder.com/150" alt="Book Cover" class="w-full h-48 object-cover mb-4 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-2">Book Title</h4>
+                    <p class="text-gray-700 mb-2">Author Name</p>
+                    <a href="/books/1" class="text-blue-600 hover:underline">View Details</a>
+                </div>
+                <!-- Repeat for more books as needed -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition">
+                    <img src="https://via.placeholder.com/150" alt="Book Cover" class="w-full h-48 object-cover mb-4 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-2">Book Title</h4>
+                    <p class="text-gray-700 mb-2">Author Name</p>
+                    <a href="/books/2" class="text-blue-600 hover:underline">View Details</a>
+                </div>
+                <!-- Add more books here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white py-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; 2024 Overbooked. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

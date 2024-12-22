@@ -23,14 +23,13 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-// GET
-// library homepage
+// GET - library homepage
 exports.getLibrary = function (req, res) {
     User.findOne({ _id: req.params.userID }, function (err, foundUser) {
         if (err) {
             res.send(err);
         } else {
-            if (foundUser.signedIn == false) {
+            if (foundUser.signedIn === false) {
                 res.render("login", { dangerMessage: "Please Sign In before accessing the library." });
             } else {
                 Library.find({}, function (err, foundBooks) {
@@ -48,8 +47,7 @@ exports.getLibrary = function (req, res) {
     });
 }
 
-// POST
-// sign out from the library
+// POST - sign out from the library
 exports.postSignout = function (req, res) {
     User.findOne({ _id: req.params.userID }, async function (err, foundUser) {
         if (err) {
@@ -61,33 +59,42 @@ exports.postSignout = function (req, res) {
         }
     });
 }
-
-// POST
-// issue a book from the library
+// POST - issue a book from the library
 exports.postIssueBook = function (req, res) {
     User.findOne({ _id: req.params.userID }, async function (err, foundUser) {
         if (err) {
             res.send(err);
         } else {
-            var hasBook = false;
+            let hasBook = false;
+
+            // Check if the user has already issued the book
             foundUser.issuedBooks.forEach(async function (object) {
                 if (object.bookName === req.body.bookName) {
                     hasBook = true;
                 }
             });
+
             if (!hasBook) {
-                foundUser.issuedBooks.push({
-                    bookName: req.body.bookName
-                });
-                await foundUser.save();
+             
                 Library.findOne({ bookName: req.body.bookName }, async function (error, libraryBook) {
                     if (error) {
-                        res.send(err);
+                        res.send(error);
                     } else {
-                        libraryBook.available = libraryBook.available - 1;
-                        libraryBook.issued = libraryBook.issued + 1;
+                        // Update the available and issued counts in the library
+                        libraryBook.available -= 1;
+                        libraryBook.issued += 1;
                         await libraryBook.save();
-                        res.redirect("/library/" + req.params.userID);
+
+                        // Add the book to the user's issuedBooks array, including cover and pdf info
+                        foundUser.issuedBooks.push({
+                            bookName: req.body.bookName,
+                            cover: libraryBook.cover,
+                            pdf: libraryBook.pdf
+                        });
+                        await foundUser.save();
+
+                        // After issuing, redirect and pass the relevant book details to the view
+                        res.redirect("/library/" + req.params.userID + "?bookName=" + req.body.bookName + "&cover=" + libraryBook.cover + "&pdf=" + libraryBook.pdf);
                     }
                 });
             } else {
@@ -97,15 +104,15 @@ exports.postIssueBook = function (req, res) {
     });
 }
 
-// POST
-// return books to the library
+
+// POST - return books to the library
 exports.postReturnBook = function (req, res) {
     User.findOne({ _id: req.params.userID }, function (err, foundUser) {
         if (err) {
             res.send(err);
         } else {
             foundUser.issuedBooks.forEach(async function (object, index) {
-                if (object.bookName == req.body.returnBookName) {
+                if (object.bookName === req.body.returnBookName) {
                     foundUser.issuedBooks.splice(index, 1);
                     await foundUser.save();
                 }
@@ -114,8 +121,8 @@ exports.postReturnBook = function (req, res) {
                 if (err) {
                     res.send(err);
                 } else {
-                    foundBook.issued = foundBook.issued - 1;
-                    foundBook.available = foundBook.available + 1;
+                    foundBook.issued -= 1;
+                    foundBook.available += 1;
                     await foundBook.save();
                 }
             });
@@ -124,14 +131,13 @@ exports.postReturnBook = function (req, res) {
     });
 }
 
-// GET
-// add new books to the library
+// GET - new books to the library
 exports.getNewBook = async function (req, res) {
     User.findOne({ _id: req.params.userID }, function (err, foundUser) {
         if (err) {
             res.send(`Please login or register <a href="/">here</a> before accessing the library!`);
         } else {
-            if (foundUser.signedIn == false) {
+            if (foundUser.signedIn === false) {
                 res.render("login", { dangerMessage: "Please Sign In before adding a book to the library." });
             } else {
                 res.render("newBook", { user: foundUser });
@@ -140,9 +146,7 @@ exports.getNewBook = async function (req, res) {
     });
 }
 
-// POST
-// POST
-// add new books to the library (with PDF upload)
+// POST - add new books to the library (with PDF upload)
 exports.postNewBook = function (req, res) {
     upload.single('newBookPDF')(req, res, function (err) {
         if (err) {
@@ -158,16 +162,16 @@ exports.postNewBook = function (req, res) {
                 if (foundBook) {
                     res.send(`Sorry, that book already exists in the library, please try with another book.`);
                 } else {
-                    const pdfPath = req.file ? `/uploads/pdfs/${req.file.filename}` : null; // Get PDF path if uploaded
+                    const pdfPath = req.file ? `/uploads/pdfs/${req.file.filename}` : null; 
 
                     const newBook = new Library({
                         bookName: req.body.newBookName,
                         issued: 0,
-                        available: 50,
-                        total: 50,
+                        available: 5,
+                        total: 5,
                         cover: req.body.newBookCover || "https://source.unsplash.com/random",
                         rating: req.body.newBookRating,
-                        pdf: pdfPath, // Save PDF path to the database
+                        pdf: pdfPath,
                     });
 
                     await newBook.save();
@@ -177,3 +181,30 @@ exports.postNewBook = function (req, res) {
         });
     });
 };
+
+// POST - delete a book from the library
+exports.postDeleteBook = function (req, res) {
+    const { userID, bookID } = req.params;  // Use bookID instead of bookName
+
+    // Remove the book from the library collection
+    Library.findByIdAndDelete(bookID, async function (err, deletedBook) {  // Use bookID to find the book
+        if (err) {
+            res.send(err);
+        } else {
+            // If the book exists in the library, remove it from users' issuedBooks
+            User.updateMany(
+                { "issuedBooks.bookID": bookID },  // Match by bookID
+                { $pull: { issuedBooks: { bookID: bookID } } },  // Pull bookID
+                function (err, result) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        // Redirect after successful deletion
+                        res.redirect("/library/" + userID);
+                    }
+                }
+            );
+        }
+    });
+};
+
